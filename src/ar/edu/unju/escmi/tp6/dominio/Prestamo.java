@@ -5,9 +5,9 @@ import java.time.LocalDate;
 public class Prestamo {
     private int id;
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucion; // puede ser null hasta la devolución
-    private Libro libro;
-    private Usuario usuario;
+    private LocalDate fechaDevolucion; // prevista o real (puede ser null si no devuelto aún)
+    private Libro libro;   // dirección: Prestamo=libro (1)
+    private Usuario usuario; // dirección: Prestamousuario (1)
 
     public Prestamo(int id, LocalDate fechaPrestamo, LocalDate fechaDevolucion, Libro libro, Usuario usuario) {
         this.id = id;
@@ -23,16 +23,19 @@ public class Prestamo {
     public Libro getLibro() { return libro; }
     public Usuario getUsuario() { return usuario; }
 
+    // registra la devolución real y actualiza el libro
     public void registrarDevolucion(LocalDate fechaReal) {
         this.fechaDevolucion = fechaReal;
-        if (libro != null) libro.registrarDevolucion(); // actualiza estado del libro
+        if (libro != null) {
+            libro.registrarDevolucion(fechaReal);
+        }
     }
 
     public void mostrarDatos() {
         System.out.println("Prestamo -> ID: " + id);
         System.out.println("  FechaPrestamo: " + fechaPrestamo);
         System.out.println("  FechaDevolucion: " + (fechaDevolucion == null ? "No devuelto" : fechaDevolucion));
-        System.out.println("  Libro: " + libro.getTitulo() + " (ID " + libro.getId() + ")");
+        System.out.println("  Libro: " + (libro != null ? libro.getTitulo() + " (ID " + libro.getId() + ")" : "N/A"));
         System.out.println("  Usuario: " + usuario.getNombre() + " " + usuario.getApellido() + " (ID " + usuario.getId() + ")");
     }
 }

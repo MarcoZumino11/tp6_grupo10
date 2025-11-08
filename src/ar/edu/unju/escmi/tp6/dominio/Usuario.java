@@ -1,10 +1,10 @@
 package ar.edu.unju.escmi.tp6.dominio;
 
 public abstract class Usuario {
-    protected int id;
-    protected String nombre;
-    protected String apellido;
-    protected String email;
+    private int id;
+    private String nombre;
+    private String apellido;
+    private String email;
 
     public Usuario(int id, String nombre, String apellido, String email) {
         this.id = id;
@@ -13,10 +13,16 @@ public abstract class Usuario {
         this.email = email;
     }
 
+    // getters
     public int getId() { return id; }
     public String getNombre() { return nombre; }
     public String getApellido() { return apellido; }
     public String getEmail() { return email; }
+
+    // setters (si necesitás modificar alguno)
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
+    public void setEmail(String email) { this.email = email; }
 
     public abstract void mostrarDatos();
 

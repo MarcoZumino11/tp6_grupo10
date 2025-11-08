@@ -12,7 +12,7 @@ public class Bibliotecario extends Usuario {
 
     @Override
     public void mostrarDatos() {
-        System.out.println("Bibliotecario -> ID: " + id + " | " + nombre + " " + apellido + " | Email: " + email +
-                           " | Legajo: " + legajo);
+        System.out.println("Bibliotecario -> ID: " + getId() + " | " + getNombre() + " " + getApellido() +
+                           " | Email: " + getEmail() + " | Legajo: " + legajo);
     }
 }

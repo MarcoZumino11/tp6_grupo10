@@ -1,5 +1,7 @@
 package ar.edu.unju.escmi.tp6.dominio;
 
+import java.time.LocalDate;
+
 public class Libro {
     private int id;
     private String autor;
@@ -25,17 +27,16 @@ public class Libro {
 
     public void mostrarDatos() {
         System.out.println("Libro -> ID: " + id + " | Titulo: " + titulo + " | Autor: " + autor +
-                           " | ISBN: " + isbn + " | Estado: " + (estado ? "Disponible" : "No disponible"));
+                           " | ISBN: " + isbn + " | Estado: " + (estado ? "Disponible" : "Prestado"));
     }
 
-    // Método indicado en el diagrama: registrarDevolucion (simple: marca disponible)
-    public void registrarDevolucion() {
+    public void registrarDevolucion(LocalDate fecha) {
         this.estado = true;
     }
 
     @Override
     public String toString() {
         return "Libro{id=" + id + ", autor='" + autor + "', titulo='" + titulo + "', isbn='" + isbn +
-               "', estado=" + (estado ? "Disponible" : "No disponible") + "}";
+               "', estado=" + (estado ? "Disponible" : "Prestado") + "}";
     }
 }
