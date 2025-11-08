@@ -5,12 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionUsuario {
-    public static List<Usuario> usuarios = new ArrayList<>();
+    private static final List<Usuario> usuarios = new ArrayList<>();
 
-    public static void agregarUsuario(Usuario u) { usuarios.add(u); }
+    public static void registrarUsuario(Usuario u) {
+        usuarios.add(u);
+    }
+
+    public static List<Usuario> obtenerUsuarios() {
+        return new ArrayList<>(usuarios);
+    }
+
+    public static void mostrarUsuarios() {
+        if (usuarios.isEmpty()) {
+            System.out.println("No hay usuarios registrados.");
+            return;
+        }
+        for (Usuario u : usuarios) u.mostrarDatos();
+    }
 
     public static Usuario buscarPorId(int id) {
         for (Usuario u : usuarios) if (u.getId() == id) return u;
         return null;
+    }
+
+    public static boolean eliminarUsuario(int id) {
+        return usuarios.removeIf(u -> u.getId() == id);
     }
 }

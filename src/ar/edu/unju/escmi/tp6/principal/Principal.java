@@ -23,18 +23,18 @@ public class Principal {
             String opcion = sc.nextLine();
             try {
                 switch (opcion) {
-                    case "1": registrarLibro(); break;
-                    case "2": registrarUsuario(); break;
+                    case "1": altaLibro(); break;
+                    case "2": altaUsuario(); break;
                     case "3": prestarLibro(); break;
                     case "4": devolverLibro(); break;
-                    case "5": listarLibros(); break;
-                    case "6": listarUsuarios(); break;
-                    case "7": listarPrestamos(); break;
+                    case "5": CollectionLibro.mostrarLibros(); break;
+                    case "6": CollectionUsuario.mostrarUsuarios(); break;
+                    case "7": CollectionPrestamo.mostrarPrestamos(); break;
                     case "8": System.out.println("Saliendo..."); salir = true; break;
                     default: System.out.println("Opción inválida.");
                 }
             } catch (Exception e) {
-                System.out.println("Ocurrió un error: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             } finally {
                 System.out.println();
             }
@@ -43,147 +43,98 @@ public class Principal {
 
     private static void mostrarMenu() {
         System.out.println("---- Biblioteca (TP6) ----");
-        System.out.println("1 - Registrar libro");
-        System.out.println("2 - Registrar usuario");
-        System.out.println("3 - Prestar libro");
-        System.out.println("4 - Devolver libro");
-        System.out.println("5 - Listar libros");
-        System.out.println("6 - Listar usuarios");
-        System.out.println("7 - Listar préstamos");
+        System.out.println("1 - Alta Libro");
+        System.out.println("2 - Alta Usuario");
+        System.out.println("3 - Prestar Libro");
+        System.out.println("4 - Devolver Libro");
+        System.out.println("5 - Mostrar Libros");
+        System.out.println("6 - Mostrar Usuarios");
+        System.out.println("7 - Mostrar Prestamos");
         System.out.println("8 - Salir");
-        System.out.print("Elija opción: ");
+        System.out.print("Opción: ");
     }
 
-    private static void registrarLibro() {
-        try {
-            System.out.print("Autor: ");
-            String autor = sc.nextLine();
-            System.out.print("Título: ");
-            String titulo = sc.nextLine();
-            System.out.print("ISBN: ");
-            String isbn = sc.nextLine();
-            Libro l = new Libro(contadorLibros++, autor, titulo, isbn, true);
-            CollectionLibro.agregarLibro(l);
-            System.out.println("Libro registrado correctamente. ID: " + l.getId());
-        } catch (Exception e) {
-            System.out.println("Error registrando libro: " + e.getMessage());
-        }
+    private static void altaLibro() {
+        System.out.print("Autor: "); String autor = sc.nextLine();
+        System.out.print("Titulo: "); String titulo = sc.nextLine();
+        System.out.print("ISBN: "); String isbn = sc.nextLine();
+        Libro l = new Libro(contadorLibros++, autor, titulo, isbn, true);
+        CollectionLibro.registrarLibro(l);
+        System.out.println("Libro registrado ID: " + l.getId());
     }
 
-    private static void registrarUsuario() {
-        try {
-            System.out.print("¿Alumno (A) o Bibliotecario (B)? ");
-            String tipo = sc.nextLine();
-            System.out.print("Nombre: "); String nombre = sc.nextLine();
-            System.out.print("Apellido: "); String apellido = sc.nextLine();
-            System.out.print("Email: "); String email = sc.nextLine();
-            if (tipo.equalsIgnoreCase("A")) {
-                System.out.print("Nro libreta: "); String nro = sc.nextLine();
-                System.out.print("Curso: "); String curso = sc.nextLine();
-                Alumno a = new Alumno(contadorUsuarios++, nombre, apellido, email, nro, curso);
-                CollectionUsuario.agregarUsuario(a);
-                System.out.println("Alumno registrado. ID: " + a.getId());
-            } else {
-                System.out.print("Legajo (número): ");
-                int legajo = Integer.parseInt(sc.nextLine());
-                Bibliotecario b = new Bibliotecario(contadorUsuarios++, nombre, apellido, email, legajo);
-                CollectionUsuario.agregarUsuario(b);
-                System.out.println("Bibliotecario registrado. ID: " + b.getId());
-            }
-        } catch (NumberFormatException nfe) {
-            System.out.println("Formato inválido para legajo.");
-        } catch (Exception e) {
-            System.out.println("Error registrando usuario: " + e.getMessage());
+    private static void altaUsuario() {
+        System.out.print("¿Alumno (A) o Bibliotecario (B)? "); String tipo = sc.nextLine();
+        System.out.print("Nombre: "); String nombre = sc.nextLine();
+        System.out.print("Apellido: "); String apellido = sc.nextLine();
+        System.out.print("Email: "); String email = sc.nextLine();
+        if (tipo.equalsIgnoreCase("A")) {
+            System.out.print("Nro Libreta (num): "); int nro = Integer.parseInt(sc.nextLine());
+            System.out.print("Curso: "); String curso = sc.nextLine();
+            Alumno a = new Alumno(contadorUsuarios++, nombre, apellido, email, nro, curso);
+            CollectionUsuario.registrarUsuario(a);
+            System.out.println("Alumno registrado ID: " + a.getId());
+        } else {
+            System.out.print("Legajo (num): "); int legajo = Integer.parseInt(sc.nextLine());
+            Bibliotecario b = new Bibliotecario(contadorUsuarios++, nombre, apellido, email, legajo);
+            CollectionUsuario.registrarUsuario(b);
+            System.out.println("Bibliotecario registrado ID: " + b.getId());
         }
     }
 
     private static void prestarLibro() throws LibroNoEncontradoException, UsuarioNoRegistradoException, LibroNoDisponibleException {
         try {
-            System.out.print("ID Libro a prestar: ");
-            int idLibro = Integer.parseInt(sc.nextLine());
+            System.out.print("ID Libro a prestar: "); int idLibro = Integer.parseInt(sc.nextLine());
             Libro libro = CollectionLibro.buscarPorId(idLibro);
-            if (libro == null) throw new LibroNoEncontradoException("No existe libro con ID " + idLibro);
-            if (!libro.isEstado()) throw new LibroNoDisponibleException("El libro no está disponible.");
+            if (libro == null) throw new LibroNoEncontradoException("Libro no encontrado ID " + idLibro);
+            if (!libro.isEstado()) throw new LibroNoDisponibleException("Libro no disponible (ya prestado).");
 
-            System.out.print("ID Usuario: ");
-            int idUsuario = Integer.parseInt(sc.nextLine());
+            System.out.print("ID Usuario: "); int idUsuario = Integer.parseInt(sc.nextLine());
             Usuario usuario = CollectionUsuario.buscarPorId(idUsuario);
-            if (usuario == null) throw new UsuarioNoRegistradoException("Usuario con ID " + idUsuario + " no registrado.");
+            if (usuario == null) throw new UsuarioNoRegistradoException("Usuario no registrado ID " + idUsuario);
 
-            System.out.print("Fecha préstamo (dd/MM/yyyy): ");
-            String fechaP = sc.nextLine();
-            LocalDate fechaPrestamo = FechaUtil.convertirStringLocalDate(fechaP);
+            System.out.print("Fecha prestamo (dd/MM/yyyy): "); String fP = sc.nextLine();
+            LocalDate fechaPrestamo = FechaUtil.convertirStringLocalDate(fP);
 
-            System.out.print("Fecha devolución prevista (dd/MM/yyyy): ");
-            String fechaD = sc.nextLine();
-            LocalDate fechaDevolucion = FechaUtil.convertirStringLocalDate(fechaD);
+            System.out.print("Fecha devolucion prevista (dd/MM/yyyy): "); String fD = sc.nextLine();
+            LocalDate fechaDevolucion = FechaUtil.convertirStringLocalDate(fD);
 
-            // marcar libro como prestado y crear préstamo
-            libro.setEstado(false);
+            libro.setEstado(false); // marcar como prestado
             Prestamo p = new Prestamo(contadorPrestamos++, fechaPrestamo, fechaDevolucion, libro, usuario);
-            CollectionPrestamo.agregarPrestamo(p);
-            System.out.println("Préstamo registrado. ID préstamo: " + p.getId());
+            CollectionPrestamo.registrarPrestamo(p);
+            System.out.println("Prestamo registrado ID: " + p.getId());
         } catch (NumberFormatException nfe) {
-            System.out.println("ID inválido.");
+            System.out.println("ID inválido (debe ser número).");
         } catch (DateTimeParseException dtpe) {
-            System.out.println("Formato de fecha inválido. Use dd/MM/yyyy.");
+            System.out.println("Formato fecha inválido. Use dd/MM/yyyy.");
         }
     }
 
     private static void devolverLibro() {
         try {
-            System.out.print("ID Préstamo a devolver: ");
-            int idPrest = Integer.parseInt(sc.nextLine());
+            System.out.print("ID Prestamo a devolver: "); int idPrest = Integer.parseInt(sc.nextLine());
             Prestamo p = CollectionPrestamo.buscarPorId(idPrest);
             if (p == null) {
-                System.out.println("No se encontró préstamo con ID " + idPrest);
+                System.out.println("No existe préstamo con ID " + idPrest);
                 return;
             }
-            System.out.print("Fecha real de devolución (dd/MM/yyyy): ");
-            String fechaStr = sc.nextLine();
-            LocalDate fechaReal = FechaUtil.convertirStringLocalDate(fechaStr);
+            System.out.print("Fecha real de devolución (dd/MM/yyyy): "); String fReal = sc.nextLine();
+            LocalDate fechaReal = FechaUtil.convertirStringLocalDate(fReal);
             p.registrarDevolucion(fechaReal);
-            System.out.println("Devolución registrada. Libro ID " + p.getLibro().getId() + " ahora disponible.");
+            System.out.println("Devolución registrada. Libro ID " + p.getLibro().getId() + " disponible.");
         } catch (NumberFormatException nfe) {
             System.out.println("ID inválido.");
         } catch (DateTimeParseException dtpe) {
             System.out.println("Formato de fecha inválido.");
         } catch (Exception e) {
-            System.out.println("Error en devolución: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
-    }
-
-    private static void listarLibros() {
-        if (CollectionLibro.libros.isEmpty()) {
-            System.out.println("No hay libros.");
-            return;
-        }
-        System.out.println("---- Libros ----");
-        for (Libro l : CollectionLibro.libros) l.mostrarDatos();
-    }
-
-    private static void listarUsuarios() {
-        if (CollectionUsuario.usuarios.isEmpty()) {
-            System.out.println("No hay usuarios.");
-            return;
-        }
-        System.out.println("---- Usuarios ----");
-        for (Usuario u : CollectionUsuario.usuarios) u.mostrarDatos();
-    }
-
-    private static void listarPrestamos() {
-        if (CollectionPrestamo.prestamos.isEmpty()) {
-            System.out.println("No hay préstamos.");
-            return;
-        }
-        System.out.println("---- Préstamos ----");
-        for (Prestamo p : CollectionPrestamo.prestamos) p.mostrarDatos();
     }
 
     private static void cargarDatosDemo() {
-        CollectionLibro.agregarLibro(new Libro(contadorLibros++, "Autor A", "Programación en Java", "111-AAA", true));
-        CollectionLibro.agregarLibro(new Libro(contadorLibros++, "Autor B", "Algoritmos y Estructuras", "222-BBB", true));
-        CollectionUsuario.agregarUsuario(new Alumno(contadorUsuarios++, "Juan", "Pérez", "juan@ejemplo.com", "L-100", "5to"));
-        CollectionUsuario.agregarUsuario(new Bibliotecario(contadorUsuarios++, "Ana", "Gómez", "ana@ejemplo.com", 1234));
+        CollectionLibro.registrarLibro(new Libro(contadorLibros++, "Autor A", "Programacion Java", "111-AAA", true));
+        CollectionLibro.registrarLibro(new Libro(contadorLibros++, "Autor B", "Estructuras Datos", "222-BBB", true));
+        CollectionUsuario.registrarUsuario(new Alumno(contadorUsuarios++, "Juan", "Perez", "juan@ejemplo.com", 100, "5to"));
+        CollectionUsuario.registrarUsuario(new Bibliotecario(contadorUsuarios++, "Ana", "Gomez", "ana@ejemplo.com", 123));
     }
 }
