@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
  * Excepción lanzada cuando el sistema no encuentra un libro según el ID.
  * 
  * 
- * Incluye atributos y métodos propios para brindar contexto adicional.
+ * git Incluye atributos y métodos propios para brindar contexto adicional.
  */
 public class LibroNoEncontradoException extends Exception {
     private LocalDateTime fechaError;
