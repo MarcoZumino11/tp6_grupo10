@@ -5,7 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
+/**
+ * Clase que simula el repositorio de libros en memoria.
+ * - Métodos: registrarLibro, mostrarLibros, buscarPorId, eliminarLibro.
+ *
+ * Estas clases Collections están separadas para respetar SRP (Single Responsibility).
+ * Permiten centralizar operaciones sobre las listas.
+ */
 public class CollectionLibro {
+    // lista privada estática: se simula un almacenamiento global en memoria
     private static final List<Libro> libros = new ArrayList<>();
 
     public static void registrarLibro(Libro libro) {
