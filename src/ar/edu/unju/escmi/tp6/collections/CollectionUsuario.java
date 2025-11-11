@@ -4,6 +4,12 @@ import ar.edu.unju.escmi.tp6.dominio.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio en memoria para usuarios.
+ * - registrarUsuario, mostrarUsuarios, buscarPorId, eliminarUsuario.
+ *
+ * Separa la gestión de usuarios de la lógica de negocio (Principal).
+ */
 public class CollectionUsuario {
     private static final List<Usuario> usuarios = new ArrayList<>();
 

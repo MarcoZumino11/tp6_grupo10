@@ -9,6 +9,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Clase Principal con menú por consola.
+ * - Usa las Collections para operaciones de alta, préstamo, devolución y listados.
+ * - Captura excepciones específicas para mostrar mensajes claros al usuario.
+ *
+ * Separación de responsabilidades:
+ * Collections = persistencia en memoria; Principal = orquestador / UI.
+ */
 public class Principal {
     private static Scanner sc = new Scanner(System.in);
     private static int contadorLibros = 1;
@@ -34,6 +42,7 @@ public class Principal {
                     default: System.out.println("Opción inválida.");
                 }
             } catch (Exception e) {
+                // Mensaje amigable que puede venir de excepciones personalizadas
                 System.out.println("Error: " + e.getMessage());
             } finally {
                 System.out.println();
@@ -54,6 +63,7 @@ public class Principal {
         System.out.print("Opción: ");
     }
 
+    // ALTA LIBRO: crea un Libro y lo registra en CollectionLibro
     private static void altaLibro() {
         System.out.print("Autor: "); String autor = sc.nextLine();
         System.out.print("Titulo: "); String titulo = sc.nextLine();
@@ -63,6 +73,7 @@ public class Principal {
         System.out.println("Libro registrado ID: " + l.getId());
     }
 
+    // ALTA USUARIO: crea Alumno o Bibliotecario según la elección del usuario
     private static void altaUsuario() {
         System.out.print("¿Alumno (A) o Bibliotecario (B)? "); String tipo = sc.nextLine();
         System.out.print("Nombre: "); String nombre = sc.nextLine();
@@ -82,6 +93,7 @@ public class Principal {
         }
     }
 
+    // PRESTAR LIBRO: valida existencia y disponibilidad; lanza excepciones específicas si falla
     private static void prestarLibro() throws LibroNoEncontradoException, UsuarioNoRegistradoException, LibroNoDisponibleException {
         try {
             System.out.print("ID Libro a prestar: "); int idLibro = Integer.parseInt(sc.nextLine());
@@ -110,6 +122,7 @@ public class Principal {
         }
     }
 
+    // DEVOLVER LIBRO: busca el préstamo, registra la fecha real y actualiza el libro
     private static void devolverLibro() {
         try {
             System.out.print("ID Prestamo a devolver: "); int idPrest = Integer.parseInt(sc.nextLine());
@@ -131,6 +144,7 @@ public class Principal {
         }
     }
 
+    // Datos demo para probar rápido
     private static void cargarDatosDemo() {
         CollectionLibro.registrarLibro(new Libro(contadorLibros++, "Autor A", "Programacion Java", "111-AAA", true));
         CollectionLibro.registrarLibro(new Libro(contadorLibros++, "Autor B", "Estructuras Datos", "222-BBB", true));

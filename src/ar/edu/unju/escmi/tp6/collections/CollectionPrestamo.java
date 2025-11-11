@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
+/**
+ * Repositorio en memoria para préstamos.
+ * - registrarPrestamo, mostrarPrestamos, buscarPorId, eliminarPrestamo.
+ *
+ * La existencia de esta colección permite consultar historial de préstamos.
+ */
 public class CollectionPrestamo {
     private static final List<Prestamo> prestamos = new ArrayList<>();
 

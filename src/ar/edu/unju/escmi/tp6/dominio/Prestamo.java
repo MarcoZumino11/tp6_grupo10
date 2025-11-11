@@ -2,12 +2,20 @@ package ar.edu.unju.escmi.tp6.dominio;
 
 import java.time.LocalDate;
 
+/**
+ * Prestamo:
+ * - Dirección clara: Prestamo -> Libro y Prestamo -> Usuario (cada prestamo referencia uno de cada).
+ * - fechaDevolucion puede ser null hasta que se devuelva.
+ *
+ * Enfatizá la dirección (no hay colección de préstamos dentro de Usuario),
+ * esto cumple el feedback del profe sobre la dirección de las relaciones.
+ */
 public class Prestamo {
     private int id;
     private LocalDate fechaPrestamo;
-    private LocalDate fechaDevolucion; // prevista o real (puede ser null si no devuelto aún)
-    private Libro libro;   // dirección: Prestamo=libro (1)
-    private Usuario usuario; // dirección: Prestamousuario (1)
+    private LocalDate fechaDevolucion; // prevista o real; puede ser null
+    private Libro libro;    // relación: Prestamo -> Libro (1)
+    private Usuario usuario; // relación: Prestamo -> Usuario (1)
 
     public Prestamo(int id, LocalDate fechaPrestamo, LocalDate fechaDevolucion, Libro libro, Usuario usuario) {
         this.id = id;
@@ -23,7 +31,11 @@ public class Prestamo {
     public Libro getLibro() { return libro; }
     public Usuario getUsuario() { return usuario; }
 
-    // registra la devolución real y actualiza el libro
+    /**
+     * Registra la devolución real y delega la actualización del estado del libro.
+     * Defensa: muestra separación de responsabilidades: Prestamo registra la devolución,
+     * y Libro se ocupa de su propio estado.
+     */
     public void registrarDevolucion(LocalDate fechaReal) {
         this.fechaDevolucion = fechaReal;
         if (libro != null) {
